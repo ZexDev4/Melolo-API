@@ -3,50 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Melolo-API Dokumentasi</title>
+  <title>Melolo-API Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; max-width: 800px; }
-    h1, h2 { color: #333; }
-    pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; overflow: auto; }
-    form { margin-bottom: 20px; }
-    input { margin-right: 10px; padding: 5px; }
-    button { padding: 5px 10px; background: #007bff; color: white; border: none; cursor: pointer; }
-    button:hover { background: #0056b3; }
-    #response { margin-top: 10px; }
+    body { font-family: 'Inter', sans-serif; }
+    pre { 
+      background: #1f2937; 
+      color: #e5e7eb; 
+      padding: 1rem; 
+      border-radius: 0.5rem; 
+      max-height: 300px; 
+      overflow-y: auto; 
+      white-space: pre-wrap; 
+      word-break: break-word;
+    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #374151; }
+    ::-webkit-scrollbar-thumb { background: #6b7280; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
   </style>
 </head>
-<body>
-  <h1>Melolo-API Dokumentasi</h1>
-  <p>Base URL: https://melolo-api.vercel.app</p>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen p-4 sm:p-8 transition-all">
+  <div class="max-w-4xl mx-auto">
+    <header class="mb-8 text-center">
+      <h1 class="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
+        📚 Melolo-API Docs
+      </h1>
+      <p class="mt-2 text-sm sm:text-base">Base URL: <a href="https://melolo-api.vercel.app" class="underline hover:text-blue-400">https://melolo-api.vercel.app</a></p>
+    </header>
 
-  <h2>1. Cari Novel (/api/search)</h2>
-  <p>Method: GET</p>
-  <p>Parameter: query (wajib), offset (opsional, default: 0), limit (opsional, default: 10)</p>
-  <form onsubmit="testApi('search', event)">
-    <input type="text" id="query" placeholder="Query (e.g. super keren)" required>
-    <input type="text" id="offset" placeholder="Offset (default 0)">
-    <input type="text" id="limit" placeholder="Limit (default 10)">
-    <button type="submit">Test</button>
-  </form>
-  <pre id="response-search">Respons akan muncul di sini</pre>
+    <section class="mb-8">
+      <h2 class="text-xl sm:text-2xl font-semibold mb-4">1. Cari Novel (/api/search)</h2>
+      <p class="text-sm sm:text-base">Method: <span class="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">GET</span></p>
+      <p class="text-sm sm:text-base">Parameters: <code>query</code> (required), <code>offset</code> (optional, default: 0), <code>limit</code> (optional, default: 10)</p>
+      <form onsubmit="testApi('search', event)" class="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-4">
+        <input type="text" id="query" placeholder="Query (e.g. super keren)" required class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="text" id="offset" placeholder="Offset (default 0)" class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="text" id="limit" placeholder="Limit (default 10)" class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button type="submit" class="p-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300">Test</button>
+      </form>
+      <pre id="response-search" class="mt-4">Response will appear here</pre>
+    </section>
 
-  <h2>2. Detail Video (/api/video-details)</h2>
-  <p>Method: GET</p>
-  <p>Parameter: series_id (wajib)</p>
-  <form onsubmit="testApi('video-details', event)">
-    <input type="text" id="series_id" placeholder="Series ID (e.g. 7431079825550347281)" required>
-    <button type="submit">Test</button>
-  </form>
-  <pre id="response-video-details">Respons akan muncul di sini</pre>
+    <section class="mb-8">
+      <h2 class="text-xl sm:text-2xl font-semibold mb-4">2. Detail Video (/api/video-details)</h2>
+      <p class="text-sm sm:text-base">Method: <span class="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">GET</span></p>
+      <p class="text-sm sm:text-base">Parameter: <code>series_id</code> (required)</p>
+      <form onsubmit="testApi('video-details', event)" class="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-4">
+        <input type="text" id="series_id" placeholder="Series ID (e.g. 7431079825550347281)" required class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button type="submit" class="p-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300">Test</button>
+      </form>
+      <pre id="response-video-details" class="mt-4">Response will appear here</pre>
+    </section>
 
-  <h2>3. URL Video (/api/video-model)</h2>
-  <p>Method: GET</p>
-  <p>Parameter: video_id (wajib)</p>
-  <form onsubmit="testApi('video-model', event)">
-    <input type="text" id="video_id" placeholder="Video ID (e.g. 7431193415712246801)" required>
-    <button type="submit">Test</button>
-  </form>
-  <pre id="response-video-model">Respons akan muncul di sini</pre>
+    <section class="mb-8">
+      <h2 class="text-xl sm:text-2xl font-semibold mb-4">3. URL Video (/api/video-model)</h2>
+      <p class="text-sm sm:text-base">Method: <span class="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">GET</span></p>
+      <p class="text-sm sm:text-base">Parameter: <code>video_id</code> (required)</p>
+      <form onsubmit="testApi('video-model', event)" class="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-4">
+        <input type="text" id="video_id" placeholder="Video ID (e.g. 7431193415712246801)" required class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button type="submit" class="p-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300">Test</button>
+      </form>
+      <pre id="response-video-model" class="mt-4">Response will appear here</pre>
+    </section>
+
+    <footer class="mt-12 text-center text-sm text-gray-500 dark:text-gray-400">
+      <p>Made with ❤️ for Melolo-API | <a href="https://github.com/ZexDev4/Melolo-API" class="underline hover:text-blue-400">GitHub</a></p>
+    </footer>
 
   <script>
     async function testApi(endpoint, event) {
