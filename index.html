@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Melolo-API Dokumentasi</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 800px; }
+    h1, h2 { color: #333; }
+    pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; overflow: auto; }
+    form { margin-bottom: 20px; }
+    input { margin-right: 10px; padding: 5px; }
+    button { padding: 5px 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    #response { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Melolo-API Dokumentasi</h1>
+  <p>Base URL: https://melolo-api.vercel.app</p>
+
+  <h2>1. Cari Novel (/api/search)</h2>
+  <p>Method: GET</p>
+  <p>Parameter: query (wajib), offset (opsional, default: 0), limit (opsional, default: 10)</p>
+  <form onsubmit="testApi('search', event)">
+    <input type="text" id="query" placeholder="Query (e.g. super keren)" required>
+    <input type="text" id="offset" placeholder="Offset (default 0)">
+    <input type="text" id="limit" placeholder="Limit (default 10)">
+    <button type="submit">Test</button>
+  </form>
+  <pre id="response-search">Respons akan muncul di sini</pre>
+
+  <h2>2. Detail Video (/api/video-details)</h2>
+  <p>Method: GET</p>
+  <p>Parameter: series_id (wajib)</p>
+  <form onsubmit="testApi('video-details', event)">
+    <input type="text" id="series_id" placeholder="Series ID (e.g. 7431079825550347281)" required>
+    <button type="submit">Test</button>
+  </form>
+  <pre id="response-video-details">Respons akan muncul di sini</pre>
+
+  <h2>3. URL Video (/api/video-model)</h2>
+  <p>Method: GET</p>
+  <p>Parameter: video_id (wajib)</p>
+  <form onsubmit="testApi('video-model', event)">
+    <input type="text" id="video_id" placeholder="Video ID (e.g. 7431193415712246801)" required>
+    <button type="submit">Test</button>
+  </form>
+  <pre id="response-video-model">Respons akan muncul di sini</pre>
+
+  <script>
+    async function testApi(endpoint, event) {
+      event.preventDefault();
+      const baseUrl = 'https://melolo-api.vercel.app/api/';
+      let url = baseUrl + endpoint + '?';
+      let responseId = 'response-' + endpoint.replace('/', '-');
+
+      if (endpoint === 'search') {
+        const query = document.getElementById('query').value;
+        const offset = document.getElementById('offset').value || '0';
+        const limit = document.getElementById('limit').value || '10';
+        url += `query=${encodeURIComponent(query)}&offset=${offset}&limit=${limit}`;
+      } else if (endpoint === 'video-details') {
+        const series_id = document.getElementById('series_id').value;
+        url += `series_id=${series_id}`;
+      } else if (endpoint === 'video-model') {
+        const video_id = document.getElementById('video_id').value;
+        url += `video_id=${video_id}`;
+      }
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        document.getElementById(responseId).textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById(responseId).textContent = 'Error: ' + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
