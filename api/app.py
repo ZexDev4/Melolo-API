@@ -92,8 +92,8 @@ class TMTReaderAPI:
             item_books = item.get("books", [])
             for book in item_books:
                 book_info = {
-                    "book_id": book.get("book_id", ""),
-                    "book_name": book.get("book_name", ""),
+                    "series_id": book.get("book_id", ""),
+                    "title": book.get("book_name", ""),
                     "last_chapter_index": book.get("last_chapter_index", ""),
                     "thumb_url": book.get("thumb_url", "")
                 }
@@ -145,8 +145,8 @@ class TMTReaderAPI:
             video_info = {
                 "duration": video.get("duration", 0),
                 "digged_count": video.get("digged_count", 0),
-                "vid": video.get("vid", ""),
-                "vid_index": video.get("vid_index", "")
+                "video_id": video.get("vid", ""),
+                "chapter": video.get("vid_index", "")
             }
             videos.append(video_info)
         
