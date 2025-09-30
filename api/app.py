@@ -196,6 +196,69 @@ class TMTReaderAPI:
             "main_url": data.get("main_url", "")
         }
 
+    def get_recommendations(self) -> Dict[str, Any]:
+        """Get recommended novels and return extracted information."""
+        url = f"{self.base_url}/i18n_novel/search/scroll_recommend/v1/"
+        headers = self.common_headers.copy()
+        headers.update({
+            "User-Agent": "com.worldance.drama/50018 (Linux; U; Android 9; en; ASUS_Z01QD; Build/PI;tt-ok/3.12.13.17)",
+        })
+        params = self.common_params.copy()
+        params.update({
+            "from_scene": "0",
+            "iid": "7555696322994947858",
+            "device_id": "7555694633755166216",
+            "channel": "gp",
+            "version_code": "50018",
+            "version_name": "5.0.0",
+            "device_type": "ASUS_Z01QD",
+            "device_brand": "Asus",
+            "language": "en",
+            "os_api": "28",
+            "os_version": "9",
+            "openudid": "e86253b3c442b20a",
+            "manifest_version_code": "50018",
+            "resolution": "900*1600",
+            "dpi": "300",
+            "update_version_code": "50018",
+            "current_region": "ID",
+            "carrier_region": "id",
+            "app_language": "en",
+            "sys_language": "en",
+            "app_region": "ID",
+            "sys_region": "US",
+            "mcc_mnc": "51001",
+            "carrier_region_v2": "510",
+            "user_language": "en",
+            "time_zone": "GMT",
+            "ui_language": "en",
+            "cdid": "69a17f9e-cbed-49b2-9523-4d5397905fdc",
+            "_rticket": self._generate_rticket(),
+        })
+        
+        response = requests.get(url, headers=headers, params=params)
+        if response.status_code != 200:
+            return {"status_code": response.status_code, "recommendations": []}
+        
+        json_data = response.json()
+        recommendations = self._extract_recommendations(json_data)
+        return {"status_code": response.status_code, "recommendations": recommendations}
+
+    def _extract_recommendations(self, json_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Extract scroll_words and search_source_book_id from recommendations response."""
+        recommendations = []
+        scroll_words = json_data.get("data", {}).get("scroll_words", [])
+        search_infos = json_data.get("data", {}).get("search_infos", [])
+        
+        for word, info in zip(scroll_words, search_infos):
+            recommendation = {
+                "drama_name": word,
+                "series_id": info.get("search_source_book_id", "")
+            }
+            recommendations.append(recommendation)
+        
+        return recommendations
+
 # Initialize TMTReaderAPI
 tmt_api = TMTReaderAPI()
 
@@ -232,6 +295,12 @@ def get_video_model():
         return jsonify({"error": "video_id parameter is required"}), 400
     
     result = tmt_api.get_video_model(video_id=video_id)
+    return jsonify(result)
+
+@app.route('/api/recommend', methods=['GET'])
+def get_recommendations():
+    """API endpoint to get recommended novels."""
+    result = tmt_api.get_recommendations()
     return jsonify(result)
 
 if __name__ == "__main__":
