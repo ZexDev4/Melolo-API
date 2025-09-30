@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TMT-Drama | Nonton Video Pendek</title>
+    <title>TMT-Drama | Video Pendek</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
@@ -51,7 +51,7 @@
         .app-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 10px; /* Padding lebih kecil untuk mobile */
+            padding: 10px;
         }
 
         /* --- Navigation Bar --- */
@@ -69,16 +69,36 @@
 
         nav h1 {
             color: var(--accent-color);
-            font-size: 1.3em; /* Lebih kecil di mobile */
+            font-size: 1.3em;
             cursor: pointer;
             margin: 0;
         }
 
         .nav-link, #theme-toggle {
-            font-size: 0.9em;
+            background: none;
+            border: none;
+            color: var(--text-color);
             padding: 6px 10px;
             margin-left: 5px;
-            white-space: nowrap; /* Mencegah ikon/teks terpotong */
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: background-color 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link.active, .nav-link:hover, #theme-toggle:hover {
+            background-color: var(--accent-color);
+            color: var(--card-background);
+        }
+
+        #theme-toggle {
+            border: 1px solid var(--border-color);
+            background-color: var(--background-color);
+        }
+        #theme-toggle::before {
+            content: var(--toggle-text);
         }
         
         /* --- Content Layout --- */
@@ -93,7 +113,7 @@
 
         .drama-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Kolom lebih kecil di mobile */
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
@@ -102,17 +122,45 @@
             background-color: var(--card-background);
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
             transition: transform 0.2s;
             overflow: hidden;
             border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
         }
 
+        .drama-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(76, 81, 191, 0.2);
+        }
+
+        /* Tampilan Thumbnail */
         .drama-card img {
             width: 100%;
-            height: 250px; /* Tinggi disesuaikan untuk mobile */
+            height: 250px; 
             object-fit: cover;
             display: block;
         }
+        
+        /* Tampilan Rekomendasi (No Thumbnail) */
+        .recommendation-item {
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-background);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .recommendation-item:hover {
+            background-color: var(--code-background);
+        }
+        .recommendation-item h3 {
+            margin: 0;
+            color: var(--accent-color);
+            font-size: 1.1em;
+        }
+
 
         .card-info {
             padding: 10px;
@@ -120,6 +168,7 @@
 
         .card-info h3 {
             font-size: 1em;
+            margin: 0;
         }
         
         /* --- Search Form --- */
@@ -133,21 +182,89 @@
             flex-grow: 1;
             padding: 10px;
             border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-background);
+            color: var(--text-color);
         }
         
         /* --- Player Screen --- */
         #player-screen {
+            background-color: var(--player-bg);
             min-height: calc(100vh - 60px); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+        }
+
+        #player-screen h2 {
+            color: var(--card-background); 
+            margin-top: 20px;
         }
 
         .video-player-container {
-            width: 100%; /* Lebar penuh di mobile */
-            height: 600px; /* Tinggi lebih pendek di mobile */
-            max-width: 450px; /* Maksimum seperti HP vertikal */
-            border-radius: 0; /* Hilangkan border-radius di mobile penuh */
-            box-shadow: none;
+            width: 100%;
+            height: 600px;
+            max-width: 450px; 
+            position: relative;
+            background-color: black;
+            border-radius: 0; 
+            overflow: hidden;
             margin: 10px auto;
         }
+
+        .video-player-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* PENTING: Untuk menjaga rasio vertikal video agar tidak terpotong */
+            background-color: black;
+        }
+
+        .player-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            display: flex;
+            gap: 20px;
+        }
+
+        .player-controls button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            transition: opacity 0.2s;
+        }
+        .player-controls button:disabled {
+            background-color: #6B7280;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        #episode-info {
+            color: var(--border-color);
+            margin-top: 10px;
+        }
+        
+        /* --- Utility & Icons --- */
+        .loading-text, .error-text {
+            text-align: center;
+            padding: 30px;
+            color: var(--secondary-accent);
+        }
+        .error-text {
+             color: var(--error-color);
+        }
+        .fa-solid {
+            margin-right: 5px;
+        }
+
 
         /* MEDIA QUERIES untuk Desktop (Lebih Rapi) */
         @media (min-width: 768px) {
@@ -155,7 +272,6 @@
                 padding: 20px;
             }
             
-            /* Navigasi */
             nav {
                 padding: 20px 40px;
             }
@@ -168,20 +284,18 @@
                  margin-left: 10px;
             }
 
-            /* Grid Desktop */
             .drama-grid {
-                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Kolom lebih lebar */
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
                 gap: 25px;
                 margin-top: 25px;
             }
             
             .drama-card img {
-                height: 350px; /* Kembali ke tinggi normal */
+                height: 350px;
             }
 
-            /* Player Desktop */
             .video-player-container {
-                width: 400px; /* Tetap vertikal */
+                width: 400px; 
                 height: 700px; 
                 border-radius: 15px;
                 margin: 20px auto;
@@ -204,7 +318,7 @@
     <div class="app-container">
         <div id="dashboard-screen" class="screen active">
             <h2>Rekomendasi Terpopuler 🔥</h2>
-            <div id="recommendation-list" class="drama-grid">
+            <div id="recommendation-list" class="drama-list"> 
                 <p class="loading-text">Memuat rekomendasi...</p>
             </div>
         </div>
@@ -227,8 +341,8 @@
                 <video id="episode-player" controls autoplay loop style="display:none;"></video>
                 <p id="player-status" style="color:white; text-align: center; padding-top: 45%;">Memuat episode...</p>
                 <div class="player-controls">
-                    <button id="prev-episode"><i class="fa-solid fa-backward-step"></i></button>
-                    <button id="next-episode"><i class="fa-solid fa-forward-step"></i></button>
+                    <button id="prev-episode" disabled><i class="fa-solid fa-backward-step"></i></button>
+                    <button id="next-episode" disabled><i class="fa-solid fa-forward-step"></i></button>
                 </div>
             </div>
             
@@ -243,9 +357,8 @@
         JAVASCRIPT LOGIC
         ======================================================
         */
-        // PERUBAHAN: Gunakan domain API yang baru
         const API_BASE_URL = 'https://melolo-api.vercel.app/api'; 
-        const PLACEHOLDER_IMG = 'https://via.placeholder.com/400x350/1E293B/38BDF8?text=NO+THUMBNAIL'; 
+        const PLACEHOLDER_IMG = 'https://via.placeholder.com/400x350/1E293B/38BDF8?text=NO+IMAGE'; 
         
         let currentSeriesId = null;
         let videoList = [];
@@ -306,6 +419,11 @@
             }
         }
 
+        /**
+         * Render daftar drama.
+         * hasThumbnail = false: Render sebagai list nama (Rekomendasi).
+         * hasThumbnail = true: Render sebagai grid card dengan thumbnail (Pencarian).
+         */
         function renderDramaList(dataList, container, hasThumbnail) {
             container.innerHTML = '';
             if (!dataList || dataList.length === 0) {
@@ -313,37 +431,53 @@
                 return;
             }
 
-            dataList.forEach(item => {
-                const seriesId = item.series_id || item.series_id;
-                const title = item.title || item.drama_name;
-                const thumbUrl = hasThumbnail ? (item.thumb_url || PLACEHOLDER_IMG) : PLACEHOLDER_IMG;
-                
-                const chapterCount = item.last_chapter_index ? `Bab Terakhir: ${item.last_chapter_index}` : 'Klik untuk detail';
+            if (hasThumbnail) {
+                // Tampilan Grid dengan Thumbnail (Search Results)
+                dataList.forEach(item => {
+                    const seriesId = item.series_id;
+                    const title = item.title;
+                    const thumbUrl = item.thumb_url || PLACEHOLDER_IMG;
+                    const chapterCount = item.last_chapter_index ? `Bab: ${item.last_chapter_index}` : 'Detail';
 
-                const card = document.createElement('div');
-                card.className = 'drama-card';
-                card.innerHTML = `
-                    <img src="${thumbUrl}" alt="${title} Poster">
-                    <div class="card-info">
-                        <h3>${title}</h3>
-                        <p style="color: var(--secondary-accent); font-size: 0.8em;">${chapterCount}</p>
-                    </div>
-                `;
-                card.onclick = () => loadSeriesDetails(seriesId, title);
-                container.appendChild(card);
-            });
+                    const card = document.createElement('div');
+                    card.className = 'drama-card';
+                    card.innerHTML = `
+                        <img src="${thumbUrl}" alt="${title} Poster">
+                        <div class="card-info">
+                            <h3>${title}</h3>
+                            <p style="color: var(--secondary-accent); font-size: 0.8em;">${chapterCount}</p>
+                        </div>
+                    `;
+                    card.onclick = () => loadSeriesDetails(seriesId, title);
+                    container.appendChild(card);
+                });
+            } else {
+                // Tampilan List Tanpa Thumbnail (Recommendations)
+                dataList.forEach(item => {
+                    const seriesId = item.series_id;
+                    const title = item.drama_name;
+
+                    const listItem = document.createElement('div');
+                    listItem.className = 'recommendation-item';
+                    listItem.innerHTML = `<h3><i class="fa-solid fa-angle-right"></i> ${title}</h3>`;
+                    listItem.onclick = () => loadSeriesDetails(seriesId, title);
+                    container.appendChild(listItem);
+                });
+            }
         }
 
         // --- API & Data Fetching ---
 
         async function fetchApi(endpoint, params = {}) {
             const queryString = new URLSearchParams(params).toString();
-            const url = `${API_BASE_URL}${endpoint}?${queryString}`;
+            const url = `${API_BASE_URL}${endpoint}${queryString ? '?' + queryString : ''}`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                if (data.status_code !== 200 && data.status_code !== 20) { 
-                     throw new Error(`API Error: ${data.status_code}`);
+                
+                // Cek status_code dari API yang Anda sediakan
+                if (data.status_code && data.status_code !== 200 && data.status_code !== 20) { 
+                     throw new Error(`API returned code: ${data.status_code}`);
                 }
                 return data;
             } catch (error) {
@@ -357,12 +491,12 @@
             try {
                 const data = await fetchApi('/recommend');
                 if (data.recommendations) {
-                    renderDramaList(data.recommendations, dashboardList, false); 
+                    renderDramaList(data.recommendations, dashboardList, false); // Rekomendasi: hasThumbnail = false
                 } else {
                      dashboardList.innerHTML = '<p class="error-text">Gagal memuat data rekomendasi.</p>';
                 }
             } catch (error) {
-                dashboardList.innerHTML = `<p class="error-text">Error jaringan. Pastikan domain API (${API_BASE_URL}) dapat diakses. ${error.message}</p>`;
+                dashboardList.innerHTML = `<p class="error-text">Error jaringan. Cek koneksi API (${API_BASE_URL}). ${error.message}</p>`;
             }
         }
 
@@ -374,12 +508,12 @@
 
             try {
                 const detailsData = await fetchApi('/video-details', { series_id: seriesId });
-                videoList = detailsData.videos.sort((a, b) => a.chapter - b.chapter); 
+                videoList = detailsData.videos.sort((a, b) => parseInt(a.chapter) - parseInt(b.chapter)); 
                 currentSeriesId = seriesId;
                 
                 if (videoList.length === 0) {
                     playerTitle.textContent = title;
-                    playerStatus.textContent = "Tidak ada episode ditemukan untuk drama ini.";
+                    playerStatus.textContent = "Tidak ada episode ditemukan.";
                     return;
                 }
 
@@ -394,8 +528,7 @@
 
         async function loadEpisode(index) {
             if (index < 0 || index >= videoList.length) {
-                if (index < 0) prevButton.disabled = true;
-                if (index >= videoList.length) nextButton.disabled = true;
+                // Jangan lakukan apa-apa, tombol sudah dinonaktifkan
                 return;
             }
             
@@ -406,12 +539,12 @@
             playerStatus.textContent = `Memuat Episode ${episode.chapter} dari ${videoList.length}...`;
             episodeInfo.textContent = `Episode: ${episode.chapter} / ${videoList.length}`;
             
+            // Atur status tombol
             prevButton.disabled = index === 0;
             nextButton.disabled = index === videoList.length - 1;
             
             try {
                 const videoData = await fetchApi('/video-model', { video_id: episode.video_id });
-                // Prioritas URL, biasanya main_url lebih baik
                 const videoUrl = videoData.video_urls.main_url || videoData.video_urls.backup_url;
 
                 if (videoUrl) {
@@ -451,7 +584,7 @@
 
             try {
                 const data = await fetchApi('/search', { query: query, limit: 20 });
-                renderDramaList(data.books, searchResultsList, true); 
+                renderDramaList(data.books, searchResultsList, true); // Pencarian: hasThumbnail = true
             } catch (error) {
                 searchResultsList.innerHTML = '<p class="error-text">Error jaringan saat mencari.</p>';
             }
