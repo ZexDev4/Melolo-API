@@ -1,104 +1,323 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Melolo-API Docs</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    pre { 
-      background: #1f2937; 
-      color: #e5e7eb; 
-      padding: 1rem; 
-      border-radius: 0.5rem; 
-      max-height: 300px; 
-      overflow-y: auto; 
-      white-space: pre-wrap; 
-      word-break: break-word;
-    }
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #374151; }
-    ::-webkit-scrollbar-thumb { background: #6b7280; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMTReader API Client - Futuristik Light Mode</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        /*
+        ======================================================
+        CSS STYLES (Futuristik Light Mode)
+        ======================================================
+        */
+        :root {
+            /* Light Mode Futuristik Palet */
+            --background-color: #F0F4F8; /* Light Sky Blue/Gray */
+            --text-color: #1A202C; /* Very Dark Blue */
+            --card-background: #FFFFFF; /* Pure White */
+            --accent-color: #4C51BF; /* Royal Purple (Bold & Deep) */
+            --secondary-accent: #3182CE; /* Bright Blue */
+            --code-background: #EBF4FF; /* Very Light Blue */
+            --error-color: #E53E3E; /* Red */
+            --success-color: #38A169; /* Green */
+            --border-color: #E2E8F0; /* Light Gray */
+        }
+
+        /* Global Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--card-background);
+            color: var(--text-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        header h1 {
+            margin: 0;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1400px;
+            margin: 20px auto;
+            display: grid;
+            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .api-card {
+            background-color: var(--card-background);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .api-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(76, 81, 191, 0.2);
+        }
+
+        .api-card h2 {
+            color: var(--secondary-accent);
+            margin-top: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        /* Form & Input Styles */
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 0.95em;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--secondary-accent);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.5);
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--card-background);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover {
+            background-color: #5A60D9; /* Sedikit lebih terang dari accent */
+            box-shadow: 0 4px 15px rgba(76, 81, 191, 0.4);
+        }
+
+        /* Output Area */
+        pre {
+            background-color: var(--code-background);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid var(--border-color);
+            margin-top: 25px;
+            color: var(--text-color);
+            font-size: 0.9em;
+        }
+
+        .json-output {
+            font-family: 'Consolas', 'Courier New', monospace;
+            line-height: 1.4;
+        }
+
+        /* Color Highlighting for JSON Output */
+        .json-output .key { color: var(--secondary-accent); }
+        .json-output .string { color: var(--success-color); } 
+        .json-output .number, .json-output .boolean { color: var(--error-color); }
+
+        /* Font Awesome Icon Styles */
+        .fa-solid, .fa-book {
+            color: var(--accent-color);
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen p-4 sm:p-8 transition-all">
-  <div class="max-w-4xl mx-auto">
-    <header class="mb-8 text-center">
-      <h1 class="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-        📚 Melolo-API Docs
-      </h1>
-      <p class="mt-2 text-sm sm:text-base">Base URL: <a href="https://melolo-api.vercel.app" class="underline hover:text-blue-400">https://melolo-api.vercel.app</a></p>
-    </header>
+<body>
+    <header>
+        <h1><i class="fa-solid fa-book"></i> TMTReader API Client</h1>
+        </header>
 
-    <section class="mb-8">
-      <h2 class="text-xl sm:text-2xl font-semibold mb-4">1. Cari Novel (/api/search)</h2>
-      <p class="text-sm sm:text-base">Method: <span class="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">GET</span></p>
-      <p class="text-sm sm:text-base">Parameters: <code>query</code> (required), <code>offset</code> (optional, default: 0), <code>limit</code> (optional, default: 10)</p>
-      <form onsubmit="testApi('search', event)" class="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-4">
-        <input type="text" id="query" placeholder="Query (e.g. super keren)" required class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <input type="text" id="offset" placeholder="Offset (default 0)" class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <input type="text" id="limit" placeholder="Limit (default 10)" class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button type="submit" class="p-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300">Test</button>
-      </form>
-      <pre id="response-search" class="mt-4">Response will appear here</pre>
-    </section>
+    <main>
+        <section class="api-card" id="search-section">
+            <h2><i class="fa-solid fa-magnifying-glass"></i> Pencarian Novel (/api/search)</h2>
+            <form id="search-form">
+                <div class="input-group">
+                    <label for="search-query">Query Wajib:</label>
+                    <input type="text" id="search-query" value="super keren" required>
+                </div>
+                <div class="input-group">
+                    <label for="search-limit">Limit (Opsional):</label>
+                    <input type="number" id="search-limit" value="5">
+                </div>
+                <button type="submit" class="btn-primary"><i class="fa-solid fa-search"></i> Cari</button>
+            </form>
+            <pre><code id="search-results" class="json-output"></code></pre>
+        </section>
+        
+        <section class="api-card" id="recommend-section">
+            <h2><i class="fa-solid fa-fire"></i> Rekomendasi Novel (/api/recommend)</h2>
+            <button id="recommend-button" class="btn-primary"><i class="fa-solid fa-star"></i> Ambil Rekomendasi</button>
+            <pre><code id="recommend-results" class="json-output"></code></pre>
+        </section>
 
-    <section class="mb-8">
-      <h2 class="text-xl sm:text-2xl font-semibold mb-4">2. Detail Video (/api/video-details)</h2>
-      <p class="text-sm sm:text-base">Method: <span class="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">GET</span></p>
-      <p class="text-sm sm:text-base">Parameter: <code>series_id</code> (required)</p>
-      <form onsubmit="testApi('video-details', event)" class="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-4">
-        <input type="text" id="series_id" placeholder="Series ID (e.g. 7431079825550347281)" required class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button type="submit" class="p-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300">Test</button>
-      </form>
-      <pre id="response-video-details" class="mt-4">Response will appear here</pre>
-    </section>
+        <section class="api-card" id="details-section">
+            <h2><i class="fa-solid fa-list-ol"></i> Detail Seri (/api/video-details)</h2>
+            <form id="details-form">
+                <div class="input-group">
+                    <label for="series-id">Series ID Wajib:</label>
+                    <input type="text" id="series-id" placeholder="Misalnya: 7538947629012345678" required>
+                </div>
+                <button type="submit" class="btn-primary"><i class="fa-solid fa-video"></i> Lihat Detail Bab</button>
+            </form>
+            <pre><code id="details-results" class="json-output"></code></pre>
+        </section>
 
-    <section class="mb-8">
-      <h2 class="text-xl sm:text-2xl font-semibold mb-4">3. URL Video (/api/video-model)</h2>
-      <p class="text-sm sm:text-base">Method: <span class="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">GET</span></p>
-      <p class="text-sm sm:text-base">Parameter: <code>video_id</code> (required)</p>
-      <form onsubmit="testApi('video-model', event)" class="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-4">
-        <input type="text" id="video_id" placeholder="Video ID (e.g. 7431193415712246801)" required class="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button type="submit" class="p-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300">Test</button>
-      </form>
-      <pre id="response-video-model" class="mt-4">Response will appear here</pre>
-    </section>
+        <section class="api-card" id="model-section">
+            <h2><i class="fa-solid fa-link"></i> URL Streaming (/api/video-model)</h2>
+            <form id="model-form">
+                <div class="input-group">
+                    <label for="video-id">Video ID Wajib:</label>
+                    <input type="text" id="video-id" placeholder="Misalnya: 7538947629012345678_1" required>
+                </div>
+                <button type="submit" class="btn-primary"><i class="fa-solid fa-download"></i> Dapatkan URL</button>
+            </form>
+            <pre><code id="model-results" class="json-output"></code></pre>
+        </section>
+    </main>
 
-    <footer class="mt-12 text-center text-sm text-gray-500 dark:text-gray-400">
-      <p>Made with ❤️ for Melolo-API | <a href="https://github.com/ZexDev4/Melolo-API" class="underline hover:text-blue-400">GitHub</a></p>
-    </footer>
+    <script>
+        /*
+        ======================================================
+        JAVASCRIPT LOGIC
+        ======================================================
+        */
+        const API_BASE_URL = 'https://melolo-api.vercel.app/api';
 
-  <script>
-    async function testApi(endpoint, event) {
-      event.preventDefault();
-      const baseUrl = 'https://melolo-api.vercel.app/api/';
-      let url = baseUrl + endpoint + '?';
-      let responseId = 'response-' + endpoint.replace('/', '-');
+        /**
+         * Mengubah objek JSON menjadi string yang diwarnai untuk tampilan.
+         */
+        function syntaxHighlight(obj) {
+            let json = JSON.stringify(obj, null, 2);
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
 
-      if (endpoint === 'search') {
-        const query = document.getElementById('query').value;
-        const offset = document.getElementById('offset').value || '0';
-        const limit = document.getElementById('limit').value || '10';
-        url += `query=${encodeURIComponent(query)}&offset=${offset}&limit=${limit}`;
-      } else if (endpoint === 'video-details') {
-        const series_id = document.getElementById('series_id').value;
-        url += `series_id=${series_id}`;
-      } else if (endpoint === 'video-model') {
-        const video_id = document.getElementById('video_id').value;
-        url += `video_id=${video_id}`;
-      }
+        /**
+         * Memanggil API dan menampilkan hasilnya.
+         */
+        async function callApi(endpoint, params, outputElement) {
+            const queryString = new URLSearchParams(params).toString();
+            const url = `${API_BASE_URL}${endpoint}?${queryString}`;
+            outputElement.innerHTML = `<span style="color:var(--secondary-accent); font-weight: bold;">[FETCHING] ${url}...</span>`;
 
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        document.getElementById(responseId).textContent = JSON.stringify(data, null, 2);
-      } catch (error) {
-        document.getElementById(responseId).textContent = 'Error: ' + error.message;
-      }
-    }
-  </script>
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                outputElement.innerHTML = syntaxHighlight(data);
+
+                // Otomatis mengisi Series ID dan Video ID untuk memudahkan alur
+                if (endpoint === '/search' && data.books && data.books.length > 0) {
+                    document.getElementById('series-id').value = data.books[0].series_id;
+                }
+                if (endpoint === '/video-details' && data.videos && data.videos.length > 0) {
+                    document.getElementById('video-id').value = data.videos[0].video_id;
+                }
+
+            } catch (error) {
+                outputElement.innerHTML = `<span style="color:var(--error-color); font-weight: bold;">[ERROR] Gagal menyambung ke server Flask. Pastikan server berjalan di ${API_BASE_URL}</span>`;
+                console.error('Fetch Error:', error);
+            }
+        }
+
+        // ------------------------------------
+        // Logic Pengiriman Form/Tombol
+        // ------------------------------------
+        
+        // Pencarian Novel
+        document.getElementById('search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = document.getElementById('search-query').value;
+            const limit = document.getElementById('search-limit').value;
+            callApi('/search', { query, limit }, document.getElementById('search-results'));
+        });
+
+        // Rekomendasi
+        document.getElementById('recommend-button').addEventListener('click', function() {
+            callApi('/recommend', {}, document.getElementById('recommend-results'));
+        });
+
+        // Detail Video
+        document.getElementById('details-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const seriesId = document.getElementById('series-id').value;
+            const output = document.getElementById('details-results');
+            if (seriesId) {
+                callApi('/video-details', { series_id: seriesId }, output);
+            } else {
+                output.innerHTML = `<span style="color:var(--error-color);">Series ID tidak boleh kosong!</span>`;
+            }
+        });
+
+        // URL Streaming Video
+        document.getElementById('model-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const videoId = document.getElementById('video-id').value;
+            const output = document.getElementById('model-results');
+            if (videoId) {
+                callApi('/video-model', { video_id: videoId }, output);
+            } else {
+                output.innerHTML = `<span style="color:var(--error-color);">Video ID tidak boleh kosong!</span>`;
+            }
+        });
+    </script>
 </body>
 </html>
