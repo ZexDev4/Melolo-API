@@ -10,11 +10,11 @@
     <style>
         /*
         ======================================================
-        CSS STYLES (Futuristik Light Mode)
+        CSS STYLES (Futuristik Light & Dark Mode)
         ======================================================
         */
         :root {
-            /* Light Mode Futuristik Palet */
+            /* ☀️ Light Mode Futuristik */
             --background-color: #F0F4F8; 
             --text-color: #1A202C; 
             --card-background: #FFFFFF; 
@@ -24,7 +24,23 @@
             --error-color: #E53E3E; 
             --success-color: #38A169; 
             --border-color: #E2E8F0; 
-            --player-bg: #111827; /* Darker background for video area */
+            --player-bg: #111827; /* Darker background for video area (Contrast) */
+            --toggle-text: '🌙 Dark Mode';
+        }
+
+        [data-theme='dark'] {
+            /* 🌙 Dark Mode Futuristik */
+            --background-color: #0F172A; /* Deep Dark Blue */
+            --text-color: #E2E8F0; /* Light Text */
+            --card-background: #1E293B; /* Darker Card */
+            --accent-color: #6366F1; /* Indigo */
+            --secondary-accent: #38BDF8; /* Sky Blue */
+            --code-background: #020617;
+            --error-color: #F87171;
+            --success-color: #34D399;
+            --border-color: #334155;
+            --player-bg: #000000; /* Pure Black for cinematic feel */
+            --toggle-text: '☀️ Light Mode';
         }
 
         /* Global & Layout */
@@ -35,6 +51,7 @@
             margin: 0;
             padding: 0;
             line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .app-container {
@@ -62,7 +79,7 @@
             cursor: pointer;
         }
 
-        .nav-link {
+        .nav-link, #theme-toggle {
             background: none;
             border: none;
             color: var(--text-color);
@@ -75,11 +92,19 @@
             transition: background-color 0.2s, color 0.2s;
         }
 
-        .nav-link.active, .nav-link:hover {
+        .nav-link.active, .nav-link:hover, #theme-toggle:hover {
             background-color: var(--accent-color);
             color: var(--card-background);
         }
-
+        
+        #theme-toggle::before {
+            content: var(--toggle-text);
+        }
+        #theme-toggle {
+            border: 1px solid var(--border-color);
+            background-color: var(--background-color);
+        }
+        
         /* Screen Management (Dashboard/Search) */
         .screen {
             display: none;
@@ -90,7 +115,7 @@
             display: block;
         }
 
-        /* Drama List & Cards (Dashboard/Search Results) */
+        /* Drama List & Cards */
         .drama-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -105,6 +130,7 @@
             cursor: pointer;
             transition: transform 0.2s;
             overflow: hidden;
+            border: 1px solid var(--border-color);
         }
 
         .drama-card:hover {
@@ -114,7 +140,7 @@
 
         .drama-card img {
             width: 100%;
-            height: 350px; /* Rasio vertikal untuk kesan TikTok/Novel Pendek */
+            height: 350px; 
             object-fit: cover;
             display: block;
         }
@@ -128,73 +154,41 @@
             margin: 0 0 5px 0;
             font-size: 1.1em;
         }
-
-        .card-info p {
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        /* Search Form */
-        #search-form {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        #search-input {
-            flex-grow: 1;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background-color: var(--card-background);
-            color: var(--text-color);
-        }
-
-        /* Player Screen (The "TikTok Slide" Experience) */
+        
+        /* Player Screen: Video Player */
         #player-screen {
             background-color: var(--player-bg);
-            min-height: calc(100vh - 80px); /* Hampir memenuhi layar */
+            min-height: calc(100vh - 80px); 
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 0;
         }
 
+        #player-screen h2 {
+            color: var(--card-background); /* Kontras di background player gelap */
+            margin-top: 20px;
+        }
+
         .video-player-container {
-            width: 400px; /* Rasio ponsel vertikal */
+            width: 400px; 
             max-width: 90%;
-            height: 700px; /* Tinggi vertikal */
+            height: 700px; 
             position: relative;
             background-color: black;
             border-radius: 15px;
             overflow: hidden;
             margin: 20px auto;
-        }
-
-        .video-player-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .player-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 50;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5); /* Efek sinematik */
         }
 
         .player-controls button {
             background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 50%;
-            margin: 0 10px;
-            cursor: pointer;
-            font-size: 1.2em;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        #episode-info {
+            color: var(--border-color);
+            margin-top: 10px;
         }
 
         /* Utility */
@@ -206,6 +200,9 @@
         .error-text {
              color: var(--error-color);
         }
+        .fa-solid {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -215,6 +212,7 @@
         <div>
             <button id="dashboard-nav" class="nav-link active" onclick="showScreen('dashboard')"><i class="fa-solid fa-house"></i> Home</button>
             <button id="search-nav" class="nav-link" onclick="showScreen('search')"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+            <button id="theme-toggle"></button>
         </div>
     </nav>
 
@@ -238,7 +236,7 @@
         </div>
 
         <div id="player-screen" class="screen">
-            <h2 id="player-title" style="color:white; margin-top: 20px;">Memuat Drama...</h2>
+            <h2 id="player-title">Memuat Drama...</h2>
             
             <div class="video-player-container">
                 <video id="episode-player" controls autoplay loop style="display:none;"></video>
@@ -249,7 +247,7 @@
                 </div>
             </div>
             
-            <p id="episode-info" style="color:var(--border-color); margin-top: 10px;">Episode: 0 / 0</p>
+            <p id="episode-info">Episode: 0 / 0</p>
             <button class="nav-link" onclick="showScreen('dashboard')" style="margin-top: 20px;"><i class="fa-solid fa-arrow-left"></i> Kembali ke Home</button>
         </div>
     </div>
@@ -260,7 +258,8 @@
         JAVASCRIPT LOGIC
         ======================================================
         */
-        const API_BASE_URL = 'https://melolo-api.vercel.app/api';
+        const API_BASE_URL = 'https://https://melolo-api.vercel.app/api';
+        const PLACEHOLDER_IMG = 'https://via.placeholder.com/400x350/1E293B/38BDF8?text=NO+THUMBNAIL'; // Placeholder untuk rekomendasi
         
         let currentSeriesId = null;
         let videoList = [];
@@ -271,19 +270,39 @@
         const searchResultsList = document.getElementById('search-results-list');
         const searchForm = document.getElementById('search-form');
         const searchInput = document.getElementById('search-input');
-        const playerScreen = document.getElementById('player-screen');
-        const playerTitle = document.getElementById('player-title');
         const episodePlayer = document.getElementById('episode-player');
+        const playerTitle = document.getElementById('player-title');
         const playerStatus = document.getElementById('player-status');
         const episodeInfo = document.getElementById('episode-info');
         const prevButton = document.getElementById('prev-episode');
         const nextButton = document.getElementById('next-episode');
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
 
+        // --- Theme Toggle Logic ---
+        const initTheme = () => {
+            const storedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+                body.setAttribute('data-theme', 'dark');
+            } else {
+                body.removeAttribute('data-theme');
+            }
+        };
+
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        
         // --- Core Functions ---
 
-        /**
-         * Mengubah tampilan layar.
-         */
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
@@ -295,7 +314,6 @@
                 document.getElementById(`${screenId}-nav`).classList.add('active');
             }
             
-            // Hentikan video saat berpindah dari player
             if (screenId !== 'player') {
                 episodePlayer.pause();
                 episodePlayer.style.display = 'none';
@@ -303,9 +321,12 @@
         }
 
         /**
-         * Render daftar drama ke dalam grid.
+         * Render daftar drama.
+         * @param {Array} dataList - Daftar novel/drama.
+         * @param {HTMLElement} container - Elemen DOM tempat daftar ditampilkan.
+         * @param {boolean} hasThumbnail - Apakah data memiliki field 'thumb_url' (true untuk /search).
          */
-        function renderDramaList(dataList, container, isRecommendation) {
+        function renderDramaList(dataList, container, hasThumbnail) {
             container.innerHTML = '';
             if (!dataList || dataList.length === 0) {
                 container.innerHTML = '<p class="loading-text">Tidak ada hasil ditemukan.</p>';
@@ -315,13 +336,15 @@
             dataList.forEach(item => {
                 const seriesId = item.series_id || item.series_id;
                 const title = item.title || item.drama_name;
-                const thumbUrl = item.thumb_url || '';
-                const chapterCount = item.last_chapter_index ? `Bab: ${item.last_chapter_index}` : 'Klik untuk detail';
+                // Hanya gunakan thumb_url jika hasThumbnail true, jika tidak pakai placeholder
+                const thumbUrl = hasThumbnail ? (item.thumb_url || PLACEHOLDER_IMG) : PLACEHOLDER_IMG;
+                
+                const chapterCount = item.last_chapter_index ? `Bab Terakhir: ${item.last_chapter_index}` : 'Klik untuk detail';
 
                 const card = document.createElement('div');
                 card.className = 'drama-card';
                 card.innerHTML = `
-                    <img src="${thumbUrl || 'https://via.placeholder.com/400x350/EBF4FF/4C51BF?text=TMT+Drama'}" alt="${title} Poster">
+                    <img src="${thumbUrl}" alt="${title} Poster">
                     <div class="card-info">
                         <h3>${title}</h3>
                         <p>${chapterCount}</p>
@@ -334,9 +357,6 @@
 
         // --- API & Data Fetching ---
 
-        /**
-         * Memanggil API dan mengembalikan data JSON.
-         */
         async function fetchApi(endpoint, params = {}) {
             const queryString = new URLSearchParams(params).toString();
             const url = `${API_BASE_URL}${endpoint}?${queryString}`;
@@ -353,21 +373,12 @@
             }
         }
 
-        /**
-         * Memuat data rekomendasi saat aplikasi dimulai.
-         */
         async function loadRecommendations() {
             dashboardList.innerHTML = '<p class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Memuat rekomendasi...</p>';
             try {
                 const data = await fetchApi('/recommend');
                 if (data.recommendations) {
-                    // Adaptasi struktur data recommend agar sesuai dengan renderDramaList
-                    const adaptedData = data.recommendations.map(r => ({
-                        series_id: r.series_id,
-                        title: r.drama_name,
-                        thumb_url: '' // Tidak ada thumb_url di endpoint recommend
-                    }));
-                    renderDramaList(adaptedData, dashboardList, true);
+                    renderDramaList(data.recommendations, dashboardList, false); // Rekomendasi: hasThumbnail = false
                 } else {
                      dashboardList.innerHTML = '<p class="error-text">Gagal memuat data rekomendasi.</p>';
                 }
@@ -376,9 +387,6 @@
             }
         }
 
-        /**
-         * Memuat detail seri dan mempersiapkan player.
-         */
         async function loadSeriesDetails(seriesId, title) {
             showScreen('player');
             playerTitle.textContent = `[Loading] ${title}`;
@@ -387,7 +395,7 @@
 
             try {
                 const detailsData = await fetchApi('/video-details', { series_id: seriesId });
-                videoList = detailsData.videos.sort((a, b) => a.chapter - b.chapter); // Urutkan berdasarkan chapter
+                videoList = detailsData.videos.sort((a, b) => a.chapter - b.chapter); 
                 currentSeriesId = seriesId;
                 
                 if (videoList.length === 0) {
@@ -405,18 +413,24 @@
             }
         }
 
-        /**
-         * Memuat URL video untuk episode saat ini dan memainkannya.
-         */
         async function loadEpisode(index) {
-            if (index < 0 || index >= videoList.length) return;
-
+            if (index < 0 || index >= videoList.length) {
+                // Batasi navigasi
+                if (index < 0) prevButton.disabled = true;
+                if (index >= videoList.length) nextButton.disabled = true;
+                return;
+            }
+            
             const episode = videoList[index];
             currentEpisodeIndex = index;
             episodePlayer.pause();
             episodePlayer.style.display = 'none';
             playerStatus.textContent = `Memuat Episode ${episode.chapter} dari ${videoList.length}...`;
             episodeInfo.textContent = `Episode: ${episode.chapter} / ${videoList.length}`;
+            
+            // Atur status tombol
+            prevButton.disabled = index === 0;
+            nextButton.disabled = index === videoList.length - 1;
             
             try {
                 const videoData = await fetchApi('/video-model', { video_id: episode.video_id });
@@ -429,10 +443,7 @@
                     episodePlayer.load();
                     episodePlayer.play().catch(e => {
                         console.warn("Autoplay diblokir:", e);
-                        playerStatus.textContent = "Klik untuk memutar Episode.";
-                        episodePlayer.addEventListener('loadeddata', () => {
-                             episodePlayer.play().catch(() => {});
-                        }, { once: true });
+                        playerStatus.textContent = "Klik tombol putar untuk Episode.";
                     });
                 } else {
                     playerStatus.textContent = `Gagal mendapatkan URL streaming untuk Episode ${episode.chapter}.`;
@@ -444,11 +455,9 @@
 
         // --- Event Handlers ---
 
-        // Navigasi Episode
         prevButton.addEventListener('click', () => loadEpisode(currentEpisodeIndex - 1));
         nextButton.addEventListener('click', () => loadEpisode(currentEpisodeIndex + 1));
         
-        // Fitur "Slide" (Next Episode saat Selesai)
         episodePlayer.addEventListener('ended', () => {
             if (currentEpisodeIndex < videoList.length - 1) {
                 loadEpisode(currentEpisodeIndex + 1);
@@ -458,8 +467,6 @@
             }
         });
 
-
-        // Pencarian Novel
         searchForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const query = searchInput.value;
@@ -468,7 +475,7 @@
 
             try {
                 const data = await fetchApi('/search', { query: query, limit: 20 });
-                renderDramaList(data.books, searchResultsList, false);
+                renderDramaList(data.books, searchResultsList, true); // Pencarian: hasThumbnail = true
             } catch (error) {
                 searchResultsList.innerHTML = '<p class="error-text">Error jaringan saat mencari.</p>';
             }
@@ -476,6 +483,7 @@
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
             loadRecommendations();
         });
     </script>
