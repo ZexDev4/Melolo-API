@@ -132,6 +132,11 @@
             margin-top: 0.5rem;
         }
 
+        .search-item .episodes {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
         #video-section {
             display: none;
             position: fixed;
@@ -444,6 +449,23 @@
             });
         }
 
+        async function loadThumbnail(img, url) {
+            try {
+                const proxyUrl = proxy + encodeURIComponent(url);
+                const res = await fetch(proxyUrl);
+                const blob = await res.blob();
+                const isHeic = url.toLowerCase().includes('.heic') || blob.type === 'image/heic' || blob.type === 'image/heif';
+                let finalBlob = blob;
+                if (isHeic) {
+                    finalBlob = await heic2any({ blob, toType: 'image/jpeg' });
+                }
+                img.src = URL.createObjectURL(finalBlob);
+            } catch (err) {
+                console.error('Thumbnail load error:', err);
+                img.src = ''; // or placeholder
+            }
+        }
+
         async function performSearch() {
             const query = searchInput.value.trim();
             if (!query) return;
@@ -457,26 +479,17 @@
                         div.classList.add('search-item');
                         const img = document.createElement('img');
                         img.alt = book.title;
-                        let url = book.thumb_url || '';
-                        const isHeic = url.toLowerCase().includes('.heic');
-                        if (isHeic) {
-                            try {
-                                const proxyUrl = proxy + encodeURIComponent(url);
-                                const blobRes = await fetch(proxyUrl);
-                                const blob = await blobRes.blob();
-                                const converted = await heic2any({ blob, toType: 'image/jpeg' });
-                                img.src = URL.createObjectURL(converted);
-                            } catch (err) {
-                                console.error('HEIC conversion error:', err);
-                                img.src = url; // fallback
-                            }
-                        } else {
-                            img.src = url;
+                        if (book.thumb_url) {
+                            loadThumbnail(img, book.thumb_url);
                         }
                         div.appendChild(img);
                         const p = document.createElement('p');
                         p.textContent = book.title;
                         div.appendChild(p);
+                        const episodesP = document.createElement('p');
+                        episodesP.classList.add('episodes');
+                        episodesP.textContent = `${book.last_chapter_index} episodes`;
+                        div.appendChild(episodesP);
                         div.addEventListener('click', () => loadDrama(book.series_id));
                         searchResults.appendChild(div);
                     }
