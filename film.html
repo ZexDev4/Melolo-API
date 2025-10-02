@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drama Stream</title>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.1/heic2any.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -144,8 +145,8 @@
 
         #back-btn {
             position: absolute;
-            top: 1rem;
-            left: 1rem;
+            top: calc(1rem + env(safe-area-inset-top));
+            left: calc(1rem + env(safe-area-inset-left));
             background: #e50914;
             border: none;
             border-radius: 50%;
@@ -203,7 +204,7 @@
 
         #controls {
             position: absolute;
-            bottom: 1rem;
+            bottom: calc(1rem + env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -235,8 +236,8 @@
 
         #episode-btn {
             position: absolute;
-            bottom: 1rem;
-            right: 1rem;
+            bottom: calc(1rem + env(safe-area-inset-bottom));
+            right: calc(1rem + env(safe-area-inset-right));
             background: #e50914;
             border: none;
             border-radius: 50%;
@@ -450,13 +451,31 @@
                 const data = await res.json();
                 searchResults.innerHTML = '';
                 if (data.status_code === 200) {
-                    data.books.forEach(book => {
+                    for (const book of data.books) {
                         const div = document.createElement('div');
                         div.classList.add('search-item');
-                        div.innerHTML = `<img src="${book.thumb_url}" alt="${book.title}"><p>${book.title}</p>`;
+                        const img = document.createElement('img');
+                        img.alt = book.title;
+                        if (book.thumb_url && book.thumb_url.endsWith('.heic')) {
+                            try {
+                                const blobRes = await fetch(book.thumb_url);
+                                const blob = await blobRes.blob();
+                                const converted = await heic2any({ blob, toType: 'image/jpeg' });
+                                img.src = URL.createObjectURL(converted);
+                            } catch (err) {
+                                console.error('HEIC conversion error:', err);
+                                img.src = book.thumb_url; // fallback
+                            }
+                        } else {
+                            img.src = book.thumb_url || '';
+                        }
+                        div.appendChild(img);
+                        const p = document.createElement('p');
+                        p.textContent = book.title;
+                        div.appendChild(p);
                         div.addEventListener('click', () => loadDrama(book.series_id));
                         searchResults.appendChild(div);
-                    });
+                    }
                 } else {
                     console.error('Error searching:', data);
                 }
@@ -633,4 +652,4 @@
         showSection('home');
     </script>
 </body>
-  </html>
+    </html>
