@@ -204,7 +204,7 @@
 
         #controls {
             position: absolute;
-            bottom: calc(1rem + env(safe-area-inset-bottom));
+            bottom: calc(3rem + env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -236,7 +236,7 @@
 
         #episode-btn {
             position: absolute;
-            bottom: calc(1rem + env(safe-area-inset-bottom));
+            bottom: calc(3rem + env(safe-area-inset-bottom));
             right: calc(1rem + env(safe-area-inset-right));
             background: #e50914;
             border: none;
@@ -390,6 +390,7 @@
         lucide.createIcons();
 
         const apiBase = 'https://melolo-api.vercel.app/';
+        const proxy = 'https://api.allorigins.win/raw?url=';
         const nav = document.getElementById('nav');
         const homeSection = document.getElementById('home-section');
         const searchSection = document.getElementById('search-section');
@@ -456,18 +457,21 @@
                         div.classList.add('search-item');
                         const img = document.createElement('img');
                         img.alt = book.title;
-                        if (book.thumb_url && book.thumb_url.endsWith('.heic')) {
+                        let url = book.thumb_url || '';
+                        const isHeic = url.toLowerCase().includes('.heic');
+                        if (isHeic) {
                             try {
-                                const blobRes = await fetch(book.thumb_url);
+                                const proxyUrl = proxy + encodeURIComponent(url);
+                                const blobRes = await fetch(proxyUrl);
                                 const blob = await blobRes.blob();
                                 const converted = await heic2any({ blob, toType: 'image/jpeg' });
                                 img.src = URL.createObjectURL(converted);
                             } catch (err) {
                                 console.error('HEIC conversion error:', err);
-                                img.src = book.thumb_url; // fallback
+                                img.src = url; // fallback
                             }
                         } else {
-                            img.src = book.thumb_url || '';
+                            img.src = url;
                         }
                         div.appendChild(img);
                         const p = document.createElement('p');
