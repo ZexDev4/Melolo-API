@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags for charset, viewport, and CSP to prevent mixed content -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self' https:; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; media-src 'self' https: blob:; connect-src 'self' https:;">
     <title>Drama Stream</title>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/heic-to@1.3.0/dist/iife/heic-to.js"></script>
+    <!-- External scripts with defer for performance -->
+    <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/heic-to@1.3.0/dist/iife/heic-to.js"></script>
     <style>
+        /* Global reset and body styles */
         * {
             margin: 0;
             padding: 0;
@@ -19,12 +23,13 @@
             overflow: auto;
             line-height: 1.6;
         }
+        /* Navigation - Fixed top bar */
         #nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: #141414; /* Lebih gelap ala Netflix */
+            background: #141414;
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -46,6 +51,7 @@
             color: #e50914;
             background: rgba(229, 9, 20, 0.1);
         }
+        /* Sections padding for fixed nav */
         #home-section, #search-section {
             padding: 5rem 1rem 1rem;
             max-width: 1200px;
@@ -57,34 +63,17 @@
             font-size: 2rem;
             color: #fff;
         }
-        /* Enhanced Recommended Grid - Responsive */
+        /* Recommended Grid - Responsive with auto-fill */
         #recommended-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Mobile: 1-2 kolom */
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 1.5rem;
             padding: 1rem;
         }
-        @media (min-width: 480px) {
-            #recommended-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Small mobile: 2 kolom */
-            }
-        }
-        @media (min-width: 768px) {
-            #recommended-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Tablet: 3 kolom */
-                padding: 2rem;
-            }
-        }
-        @media (min-width: 1024px) {
-            #recommended-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Desktop: 4+ kolom */
-            }
-        }
-        @media (min-width: 1280px) {
-            #recommended-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Large desktop */
-            }
-        }
+        @media (min-width: 480px) { #recommended-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
+        @media (min-width: 768px) { #recommended-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); padding: 2rem; } }
+        @media (min-width: 1024px) { #recommended-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); } }
+        @media (min-width: 1280px) { #recommended-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); } }
         .recommend {
             background: #141414;
             padding: 1.5rem;
@@ -96,7 +85,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            height: 200px; /* Fixed height untuk consistency */
+            height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -119,10 +108,8 @@
             transform: translateY(-5px) scale(1.02);
             box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
         }
-        .recommend:hover::before {
-            opacity: 1;
-        }
-        /* Enhanced Search - Responsive */
+        .recommend:hover::before { opacity: 1; }
+        /* Search Form - Responsive flex */
         #search-form {
             display: flex;
             width: 90%;
@@ -131,12 +118,7 @@
             flex-direction: column;
             gap: 0.75rem;
         }
-        @media (min-width: 480px) {
-            #search-form {
-                flex-direction: row;
-                gap: 0;
-            }
-        }
+        @media (min-width: 480px) { #search-form { flex-direction: row; gap: 0; } }
         #search-input {
             flex: 1;
             padding: 0.75rem 1rem;
@@ -146,10 +128,7 @@
             border-radius: 8px 0 0 8px;
             font-size: 1rem;
         }
-        #search-input::placeholder {
-            color: #aaa;
-            opacity: 1;
-        }
+        #search-input::placeholder { color: #aaa; opacity: 1; }
         #search-button {
             background: #e50914;
             border: none;
@@ -162,31 +141,17 @@
             justify-content: center;
             min-width: 50px;
         }
-        #search-button:hover {
-            background: #f40612;
-        }
+        #search-button:hover { background: #f40612; }
+        /* Search Results Grid - Responsive */
         #search-results {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Mobile kecil */
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 1.5rem;
             padding: 1rem;
         }
-        @media (min-width: 768px) {
-            #search-results {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                padding: 2rem;
-            }
-        }
-        @media (min-width: 1024px) {
-            #search-results {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            }
-        }
-        @media (min-width: 1280px) {
-            #search-results {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-        }
+        @media (min-width: 768px) { #search-results { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); padding: 2rem; } }
+        @media (min-width: 1024px) { #search-results { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); } }
+        @media (min-width: 1280px) { #search-results { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
         .search-item {
             background: #141414;
             padding: 1rem;
@@ -207,6 +172,7 @@
             height: 150px;
             object-fit: cover;
             border-radius: 8px;
+            loading: lazy; /* Lazy load for thumbnails */
         }
         .search-item p {
             margin-top: 0.75rem;
@@ -230,10 +196,8 @@
             animation: spin 1s ease-in-out infinite;
             margin: 1rem auto;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        /* Video Section - Fixed Ratio 16:9 Responsive */
+        @keyframes spin { to { transform: rotate(360deg); } }
+        /* Video Section - Fixed 16:9 ratio responsive */
         #video-section {
             display: none;
             position: fixed;
@@ -260,9 +224,7 @@
             transition: background 0.3s;
             z-index: 10;
         }
-        #back-btn:hover {
-            background: #f40612;
-        }
+        #back-btn:hover { background: #f40612; }
         #video-wrapper {
             position: relative;
             width: 100%;
@@ -275,7 +237,7 @@
         #video-wrapper::before {
             content: '';
             display: block;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio (9/16 = 0.5625) */
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
             width: 100%;
         }
         #video {
@@ -284,23 +246,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Maintain ratio without distortion, letterbox if needed */
+            object-fit: cover; /* Fill without distortion */
         }
         @media (max-width: 768px) and (orientation: portrait) {
-            #video-wrapper::before {
-                padding-bottom: 177.78%; /* 9:16 for portrait mobile, but since object-fit contain, it adapts */
-            }
-            #video {
-                object-fit: cover; /* Crop to fill in portrait for better mobile view */
-            }
+            #video-wrapper::before { padding-bottom: 177.78%; /* 9:16 for portrait */ }
+            #video { object-fit: cover; } /* Crop to fill in mobile portrait */
         }
         @media (min-width: 769px) {
-            #video-wrapper::before {
-                padding-bottom: 56.25%; /* Strict 16:9 landscape desktop */
-            }
-            #video {
-                object-fit: cover; /* Fill screen without distortion */
-            }
+            #video-wrapper::before { padding-bottom: 56.25%; /* Strict 16:9 desktop */ }
+            #video { object-fit: cover; }
         }
         #play-overlay {
             position: absolute;
@@ -314,10 +268,7 @@
             animation: pulse 1.5s infinite;
             z-index: 10;
         }
-        #play-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+        #play-overlay.hidden { opacity: 0; pointer-events: none; }
         @keyframes pulse {
             0% { transform: translate(-50%, -50%) scale(1); }
             50% { transform: translate(-50%, -50%) scale(1.1); }
@@ -343,14 +294,8 @@
             cursor: pointer;
             margin: 0 0.5rem;
         }
-        #controls button i {
-            width: 24px;
-            height: 24px;
-        }
-        #volume-slider {
-            width: 100px;
-            margin-left: 0.5rem;
-        }
+        #controls button i { width: 24px; height: 24px; }
+        #volume-slider { width: 100px; margin-left: 0.5rem; }
         #episode-btn {
             position: absolute;
             bottom: calc(3rem + env(safe-area-inset-bottom));
@@ -367,9 +312,8 @@
             transition: background 0.3s;
             z-index: 10;
         }
-        #episode-btn:hover {
-            background: #f40612;
-        }
+        #episode-btn:hover { background: #f40612; }
+        /* Bottom Sheet for Episodes */
         #bottom-sheet {
             position: fixed;
             top: 0;
@@ -384,10 +328,7 @@
             align-items: flex-end;
             z-index: 20;
         }
-        #bottom-sheet.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        #bottom-sheet.open { opacity: 1; pointer-events: auto; }
         #sheet-content {
             background: #1f1f1f;
             width: 100%;
@@ -395,13 +336,11 @@
             overflow-y: auto;
             transform: translateY(100%);
             transition: transform 0.3s ease;
-            padding: 2rem 1rem 1rem 1rem;
+            padding: 2rem 1rem 1rem;
             position: relative;
             border-radius: 16px 16px 0 0;
         }
-        #bottom-sheet.open #sheet-content {
-            transform: translateY(0);
-        }
+        #bottom-sheet.open #sheet-content { transform: translateY(0); }
         #sheet-content h2 {
             text-align: center;
             margin-bottom: 1.5rem;
@@ -416,25 +355,14 @@
             color: #fff;
             cursor: pointer;
         }
-        #close-sheet i {
-            width: 32px;
-            height: 32px;
-        }
+        #close-sheet i { width: 32px; height: 32px; }
         #episode-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
         }
-        @media (min-width: 768px) {
-            #episode-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        @media (min-width: 1024px) {
-            #episode-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
+        @media (min-width: 768px) { #episode-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { #episode-grid { grid-template-columns: repeat(4, 1fr); } }
         .episode {
             background: #333;
             padding: 1rem;
@@ -443,27 +371,23 @@
             border-radius: 8px;
             transition: all 0.3s ease;
         }
-        .episode:hover {
-            background: #444;
-            transform: translateY(-2px);
-        }
-        .episode.active {
-            background: #e50914;
-        }
-        .episode.active:hover {
-            background: #f40612;
-        }
+        .episode:hover { background: #444; transform: translateY(-2px); }
+        .episode.active { background: #e50914; }
+        .episode.active:hover { background: #f40612; }
     </style>
 </head>
 <body>
+    <!-- Navigation -->
     <nav id="nav">
         <button data-section="home" class="active">Home</button>
         <button data-section="search">Search</button>
     </nav>
+    <!-- Home Section -->
     <div id="home-section">
         <h2>Recommended Dramas</h2>
         <div id="recommended-grid"></div>
     </div>
+    <!-- Search Section -->
     <div id="search-section" style="display: none;">
         <h2>Search Dramas</h2>
         <div id="search-form">
@@ -472,6 +396,7 @@
         </div>
         <div id="search-results"></div>
     </div>
+    <!-- Video Section -->
     <div id="video-section" style="display: none;">
         <button id="back-btn"><i data-lucide="arrow-left"></i></button>
         <div id="video-wrapper">
@@ -493,9 +418,12 @@
         </div>
     </div>
     <script>
+        // Initialize icons after DOM load
         lucide.createIcons();
+        // Constants for API and proxy (all HTTPS)
         const apiBase = 'https://melolo-api.vercel.app/';
         const proxy = 'https://api.allorigins.win/raw?url=';
+        // DOM elements
         const nav = document.getElementById('nav');
         const homeSection = document.getElementById('home-section');
         const searchSection = document.getElementById('search-section');
@@ -519,26 +447,25 @@
         let currentEpisodeIndex = 0;
         let episodes = [];
         let prevVolume = 1;
-        // Loading state
+        // Blob cache Map for thumbnails (performance: avoid re-download)
+        const blobCache = new Map();
+        // Loading function
         function showLoading(container) {
             container.innerHTML = '<div class="loading"></div>';
         }
+        // Fetch recommendations
         async function fetchRecommendations() {
             try {
                 showLoading(recommendedGrid);
                 const res = await fetch(`${apiBase}/api/recommend`);
                 const data = await res.json();
-                if (data.status_code === 200) {
-                    return data.recommendations;
-                } else {
-                    console.error('Error fetching recommendations:', data);
-                    return [];
-                }
+                return data.status_code === 200 ? data.recommendations : [];
             } catch (error) {
                 console.error('Fetch error:', error);
                 return [];
             }
         }
+        // Populate recommended grid
         async function populateRecommendedGrid() {
             const recs = await fetchRecommendations();
             recommendedGrid.innerHTML = '';
@@ -546,54 +473,44 @@
                 const div = document.createElement('div');
                 div.classList.add('recommend');
                 div.textContent = drama.drama_name;
-                div.setAttribute('data-title', drama.drama_name); // For hover overlay
+                div.setAttribute('data-title', drama.drama_name);
                 div.addEventListener('click', () => loadDrama(drama.series_id));
                 recommendedGrid.appendChild(div);
             });
         }
+        // Load thumbnail with lazy-load, caching, and HEIC conversion
         async function loadThumbnail(img, url) {
+            const cacheKey = url;
+            if (blobCache.has(cacheKey)) {
+                img.src = blobCache.get(cacheKey);
+                return;
+            }
             try {
-                console.log('Loading thumbnail for URL:', url);
                 const proxyUrl = proxy + encodeURIComponent(url);
                 const res = await fetch(proxyUrl);
-                if (!res.ok) {
-                    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-                }
-                const blob = await res.blob();
-                console.log('Blob fetched:', { type: blob.type, size: blob.size });
-
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                let blob = await res.blob();
                 let isHeic = false;
                 try {
                     isHeic = await HeicTo.isHeic(blob);
-                    console.log('Is HEIC?', isHeic);
-                } catch (heicCheckErr) {
-                    console.warn('HEIC check failed, falling back to type check:', heicCheckErr);
+                } catch {
                     isHeic = url.toLowerCase().includes('.heic') || blob.type === 'image/heic' || blob.type === 'image/heif';
                 }
-
-                let finalBlob = blob;
                 if (isHeic) {
-                    console.log('Converting HEIC...');
-                    const converted = await HeicTo({
-                        blob: blob,
-                        type: 'image/jpeg',
-                        quality: 0.8
-                    });
-                    if (!converted || !(converted instanceof Blob)) {
-                        throw new Error('Conversion returned invalid blob');
-                    }
-                    finalBlob = converted;
-                    console.log('Converted blob:', { type: finalBlob.type, size: finalBlob.size });
+                    const converted = await HeicTo({ blob, type: 'image/jpeg', quality: 0.8 });
+                    if (converted && converted instanceof Blob) blob = converted;
                 }
-
-                const objectUrl = URL.createObjectURL(finalBlob);
+                const objectUrl = URL.createObjectURL(blob);
+                blobCache.set(cacheKey, objectUrl); // Cache blob URL
                 img.src = objectUrl;
-                console.log('Image src set to object URL');
+                img.loading = 'lazy'; // Ensure lazy-load
             } catch (err) {
                 console.error('Thumbnail load error:', err);
-                img.src = ''; // or placeholder
+                // Fallback placeholder SVG
+                img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2FhYSIgZGVTPSJ0ZXh0LWFuY2hvcjptaWRkbGU7IGRvbWluYW50LWJhc2VsaW5lOmNlbnRyYWw7Ij5ObyBJbWFnZTwvdGV4dD48L3N2Zz4=';
             }
         }
+        // Perform search
         async function performSearch() {
             const query = searchInput.value.trim();
             if (!query) return;
@@ -603,16 +520,13 @@
                 const data = await res.json();
                 searchResults.innerHTML = '';
                 if (data.status_code === 200) {
-                    for (const book of data.books) {
+                    data.books.forEach(book => {
                         const div = document.createElement('div');
                         div.classList.add('search-item');
                         const img = document.createElement('img');
                         img.alt = book.title;
-                        if (book.thumb_url) {
-                            loadThumbnail(img, book.thumb_url);
-                        } else {
-                            img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2FhYSIgZGVTPSJ0ZXh0LWFuY2hvcjptaWRkbGU7IGRvbWluYW50LWJhc2VsaW5lOmNlbnRyYWw7Ij5ObyBJbWFnZTwvdGV4dD48L3N2Zz4='; // Placeholder
-                        }
+                        if (book.thumb_url) loadThumbnail(img, book.thumb_url);
+                        else img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2FhYSIgZGVTPSJ0ZXh0LWFuY2hvcjptaWRkbGU7IGRvbWluYW50LWJhc2VsaW5lOmNlbnRyYWw7Ij5ObyBJbWFnZTwvdGV4dD48L3N2Zz4=';
                         div.appendChild(img);
                         const p = document.createElement('p');
                         p.textContent = book.title;
@@ -623,44 +537,35 @@
                         div.appendChild(episodesP);
                         div.addEventListener('click', () => loadDrama(book.series_id));
                         searchResults.appendChild(div);
-                    }
-                } else {
-                    console.error('Error searching:', data);
+                    });
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
             }
         }
+        // Search events
         searchButton.addEventListener('click', performSearch);
-        searchInput.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        });
+        searchInput.addEventListener('keyup', (e) => { if (e.key === 'Enter') performSearch(); });
+        // Show section function
         function showSection(sec) {
             sections.forEach(s => {
-                const sectionEl = document.getElementById(`${s}-section`);
-                sectionEl.style.display = (s === sec ? 'block' : 'none');
+                document.getElementById(`${s}-section`).style.display = s === sec ? 'block' : 'none';
                 const btn = nav.querySelector(`[data-section="${s}"]`);
                 if (btn) btn.classList.toggle('active', s === sec);
             });
-            videoSection.style.display = (sec === 'video' ? 'block' : 'none');
-            if (sec === 'video') {
-                nav.style.display = 'none';
-            } else {
-                nav.style.display = 'flex';
-                video.pause();
-            }
+            videoSection.style.display = sec === 'video' ? 'block' : 'none';
+            nav.style.display = sec === 'video' ? 'none' : 'flex';
+            if (sec !== 'video') video.pause();
         }
+        // Nav and back events
         nav.addEventListener('click', (e) => {
             if (e.target.dataset.section) {
                 lastSection = e.target.dataset.section;
                 showSection(lastSection);
             }
         });
-        backBtn.addEventListener('click', () => {
-            showSection(lastSection);
-        });
+        backBtn.addEventListener('click', () => showSection(lastSection));
+        // Load drama
         async function loadDrama(series_id) {
             try {
                 showLoading(episodeGrid);
@@ -682,13 +587,12 @@
                     });
                     await loadEpisode(0);
                     showSection('video');
-                } else {
-                    console.error('Error loading drama:', data);
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
             }
         }
+        // Load episode
         async function loadEpisode(index) {
             currentEpisodeIndex = index;
             const ep = episodes[index];
@@ -702,26 +606,20 @@
                         video.load();
                         video.play();
                         updateActiveEpisode();
-                    } else {
-                        console.error('No video URL found');
                     }
-                } else {
-                    console.error('Error loading video model:', data);
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
             }
         }
+        // Update active episode
         function updateActiveEpisode() {
             document.querySelectorAll('.episode').forEach(el => el.classList.remove('active'));
             const activeEl = document.querySelector(`.episode[data-index="${currentEpisodeIndex}"]`);
-            if (activeEl) {
-                activeEl.classList.add('active');
-            }
+            if (activeEl) activeEl.classList.add('active');
         }
-        playOverlay.addEventListener('click', () => {
-            video.play();
-        });
+        // Video events
+        playOverlay.addEventListener('click', () => video.play());
         video.addEventListener('play', () => {
             playOverlay.classList.add('hidden');
             playPauseBtn.innerHTML = '<i data-lucide="pause"></i>';
@@ -733,17 +631,9 @@
             lucide.createIcons();
         });
         video.addEventListener('ended', async () => {
-            if (currentEpisodeIndex < episodes.length - 1) {
-                await loadEpisode(currentEpisodeIndex + 1);
-            }
+            if (currentEpisodeIndex < episodes.length - 1) await loadEpisode(currentEpisodeIndex + 1);
         });
-        playPauseBtn.addEventListener('click', () => {
-            if (video.paused) {
-                video.play();
-            } else {
-                video.pause();
-            }
-        });
+        playPauseBtn.addEventListener('click', () => video.paused ? video.play() : video.pause());
         volumeToggle.addEventListener('click', () => {
             if (video.muted) {
                 video.muted = false;
@@ -761,25 +651,16 @@
         });
         volumeSlider.addEventListener('input', () => {
             video.volume = volumeSlider.value;
-            video.muted = (volumeSlider.value == 0);
-            if (video.muted) {
-                volumeToggle.innerHTML = '<i data-lucide="volume-x"></i>';
-            } else {
-                prevVolume = volumeSlider.value;
-                volumeToggle.innerHTML = '<i data-lucide="volume-2"></i>';
-            }
+            video.muted = volumeSlider.value == 0;
+            volumeToggle.innerHTML = video.muted ? '<i data-lucide="volume-x"></i>' : '<i data-lucide="volume-2"></i>';
+            if (!video.muted) prevVolume = video.volume;
             lucide.createIcons();
         });
-        episodeBtn.addEventListener('click', () => {
-            bottomSheet.classList.add('open');
-        });
-        closeSheet.addEventListener('click', () => {
-            bottomSheet.classList.remove('open');
-        });
+        // Episode sheet events
+        episodeBtn.addEventListener('click', () => bottomSheet.classList.add('open'));
+        closeSheet.addEventListener('click', () => bottomSheet.classList.remove('open'));
         bottomSheet.addEventListener('click', (e) => {
-            if (e.target === bottomSheet) {
-                bottomSheet.classList.remove('open');
-            }
+            if (e.target === bottomSheet) bottomSheet.classList.remove('open');
         });
         // Initial setup
         populateRecommendedGrid();
