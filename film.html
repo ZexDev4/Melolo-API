@@ -12,14 +12,12 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: #000;
             color: #fff;
             font-family: Arial, sans-serif;
             overflow: auto;
         }
-
         #nav {
             position: fixed;
             top: 0;
@@ -31,7 +29,6 @@
             padding: 1rem;
             z-index: 30;
         }
-
         #nav button {
             background: none;
             border: none;
@@ -40,26 +37,21 @@
             cursor: pointer;
             transition: color 0.3s;
         }
-
         #nav button:hover {
             color: #e50914;
         }
-
         #home-section, #search-section {
             padding: 5rem 1rem 1rem;
         }
-
         #home-section h2, #search-section h2 {
             text-align: center;
             margin-bottom: 1rem;
         }
-
         #recommended-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1rem;
         }
-
         .recommend {
             background: #333;
             padding: 1rem;
@@ -69,18 +61,15 @@
             border-radius: 0.5rem;
             transition: background 0.3s;
         }
-
         .recommend:hover {
             background: #e50914;
         }
-
         #search-form {
             display: flex;
             width: 80%;
             max-width: 600px;
             margin: 0 auto 1rem;
         }
-
         #search-input {
             flex: 1;
             padding: 0.5rem;
@@ -89,7 +78,6 @@
             border: none;
             border-radius: 0.5rem 0 0 0.5rem;
         }
-
         #search-button {
             background: #e50914;
             border: none;
@@ -98,17 +86,14 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-
         #search-button:hover {
             background: #f40612;
         }
-
         #search-results {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 1rem;
         }
-
         .search-item {
             background: #333;
             padding: 0.5rem;
@@ -117,26 +102,21 @@
             border-radius: 0.5rem;
             transition: background 0.3s;
         }
-
         .search-item:hover {
             background: #444;
         }
-
         .search-item img {
             width: 100%;
             height: auto;
             border-radius: 0.5rem;
         }
-
         .search-item p {
             margin-top: 0.5rem;
         }
-
         .search-item .episodes {
             font-size: 0.8rem;
             color: #aaa;
         }
-
         #video-section {
             display: none;
             position: fixed;
@@ -147,7 +127,6 @@
             background: #000;
             z-index: 10;
         }
-
         #back-btn {
             position: absolute;
             top: calc(1rem + env(safe-area-inset-top));
@@ -164,11 +143,9 @@
             transition: background 0.3s;
             z-index: 10;
         }
-
         #back-btn:hover {
             background: #f40612;
         }
-
         #video-wrapper {
             position: relative;
             width: 100%;
@@ -176,13 +153,11 @@
             max-width: calc(100vh * 9 / 16); /* Enforce 9:16 aspect ratio */
             margin: auto;
         }
-
         #video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         #play-overlay {
             position: absolute;
             top: 50%;
@@ -195,18 +170,15 @@
             animation: pulse 1.5s infinite;
             z-index: 10;
         }
-
         #play-overlay.hidden {
             opacity: 0;
             pointer-events: none;
         }
-
         @keyframes pulse {
             0% { transform: translate(-50%, -50%) scale(1); }
             50% { transform: translate(-50%, -50%) scale(1.1); }
             100% { transform: translate(-50%, -50%) scale(1); }
         }
-
         #controls {
             position: absolute;
             bottom: calc(3rem + env(safe-area-inset-bottom));
@@ -220,7 +192,6 @@
             transition: opacity 0.3s;
             z-index: 10;
         }
-
         #controls button {
             background: none;
             border: none;
@@ -228,17 +199,14 @@
             cursor: pointer;
             margin: 0 0.5rem;
         }
-
         #controls button i {
             width: 24px;
             height: 24px;
         }
-
         #volume-slider {
             width: 100px;
             margin-left: 0.5rem;
         }
-
         #episode-btn {
             position: absolute;
             bottom: calc(3rem + env(safe-area-inset-bottom));
@@ -255,11 +223,9 @@
             transition: background 0.3s;
             z-index: 10;
         }
-
         #episode-btn:hover {
             background: #f40612;
         }
-
         #bottom-sheet {
             position: fixed;
             top: 0;
@@ -274,12 +240,10 @@
             align-items: flex-end;
             z-index: 20;
         }
-
         #bottom-sheet.open {
             opacity: 1;
             pointer-events: auto;
         }
-
         #sheet-content {
             background: #1f1f1f;
             width: 100%;
@@ -290,16 +254,13 @@
             padding: 2rem 1rem 1rem 1rem;
             position: relative;
         }
-
         #bottom-sheet.open #sheet-content {
             transform: translateY(0);
         }
-
         #sheet-content h2 {
             text-align: center;
             margin-bottom: 1rem;
         }
-
         #close-sheet {
             position: absolute;
             top: 0.5rem;
@@ -309,30 +270,25 @@
             color: #fff;
             cursor: pointer;
         }
-
         #close-sheet i {
             width: 32px;
             height: 32px;
         }
-
         #episode-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
         }
-
         @media (min-width: 768px) {
             #episode-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
         @media (min-width: 1024px) {
             #episode-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
-
         .episode {
             background: #333;
             padding: 1rem;
@@ -341,15 +297,12 @@
             border-radius: 0.5rem;
             transition: background 0.3s;
         }
-
         .episode:hover {
             background: #444;
         }
-
         .episode.active {
             background: #e50914;
         }
-
         .episode.active:hover {
             background: #f40612;
         }
@@ -393,7 +346,6 @@
     </div>
     <script>
         lucide.createIcons();
-
         const apiBase = 'https://melolo-api.vercel.app/';
         const proxy = 'https://api.allorigins.win/raw?url=';
         const nav = document.getElementById('nav');
@@ -414,13 +366,11 @@
         const bottomSheet = document.getElementById('bottom-sheet');
         const closeSheet = document.getElementById('close-sheet');
         const episodeGrid = document.getElementById('episode-grid');
-
         const sections = ['home', 'search'];
         let lastSection = 'home';
         let currentEpisodeIndex = 0;
         let episodes = [];
         let prevVolume = 1;
-
         async function fetchRecommendations() {
             try {
                 const res = await fetch(`${apiBase}/api/recommend`);
@@ -436,7 +386,6 @@
                 return [];
             }
         }
-
         async function populateRecommendedGrid() {
             const recs = await fetchRecommendations();
             recommendedGrid.innerHTML = '';
@@ -448,7 +397,6 @@
                 recommendedGrid.appendChild(div);
             });
         }
-
         async function loadThumbnail(img, url) {
             try {
                 const proxyUrl = proxy + encodeURIComponent(url);
@@ -457,7 +405,11 @@
                 const isHeic = url.toLowerCase().includes('.heic') || blob.type === 'image/heic' || blob.type === 'image/heif';
                 let finalBlob = blob;
                 if (isHeic) {
-                    finalBlob = await heic2any({ blob, toType: 'image/jpeg' });
+                    const converted = await heic2any({ blob, toType: 'image/jpeg' });
+                    finalBlob = Array.isArray(converted) ? converted[0] : converted;
+                    if (!finalBlob || !(finalBlob instanceof Blob)) {
+                        throw new Error('HEIC conversion failed');
+                    }
                 }
                 img.src = URL.createObjectURL(finalBlob);
             } catch (err) {
@@ -465,7 +417,6 @@
                 img.src = ''; // or placeholder
             }
         }
-
         async function performSearch() {
             const query = searchInput.value.trim();
             if (!query) return;
@@ -500,14 +451,12 @@
                 console.error('Fetch error:', error);
             }
         }
-
         searchButton.addEventListener('click', performSearch);
         searchInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') {
                 performSearch();
             }
         });
-
         function showSection(sec) {
             sections.forEach(s => {
                 document.getElementById(`${s}-section`).style.display = (s === sec ? 'block' : 'none');
@@ -520,18 +469,15 @@
                 video.pause();
             }
         }
-
         nav.addEventListener('click', (e) => {
             if (e.target.dataset.section) {
                 lastSection = e.target.dataset.section;
                 showSection(lastSection);
             }
         });
-
         backBtn.addEventListener('click', () => {
             showSection(lastSection);
         });
-
         async function loadDrama(series_id) {
             try {
                 const res = await fetch(`${apiBase}/api/video-details?series_id=${series_id}`);
@@ -559,7 +505,6 @@
                 console.error('Fetch error:', error);
             }
         }
-
         async function loadEpisode(index) {
             currentEpisodeIndex = index;
             const ep = episodes[index];
@@ -583,7 +528,6 @@
                 console.error('Fetch error:', error);
             }
         }
-
         function updateActiveEpisode() {
             document.querySelectorAll('.episode').forEach(el => el.classList.remove('active'));
             const activeEl = document.querySelector(`.episode[data-index="${currentEpisodeIndex}"]`);
@@ -591,29 +535,24 @@
                 activeEl.classList.add('active');
             }
         }
-
         playOverlay.addEventListener('click', () => {
             video.play();
         });
-
         video.addEventListener('play', () => {
             playOverlay.classList.add('hidden');
             playPauseBtn.innerHTML = '<i data-lucide="pause"></i>';
             lucide.createIcons();
         });
-
         video.addEventListener('pause', () => {
             playOverlay.classList.remove('hidden');
             playPauseBtn.innerHTML = '<i data-lucide="play"></i>';
             lucide.createIcons();
         });
-
         video.addEventListener('ended', async () => {
             if (currentEpisodeIndex < episodes.length - 1) {
                 await loadEpisode(currentEpisodeIndex + 1);
             }
         });
-
         playPauseBtn.addEventListener('click', () => {
             if (video.paused) {
                 video.play();
@@ -621,7 +560,6 @@
                 video.pause();
             }
         });
-
         volumeToggle.addEventListener('click', () => {
             if (video.muted) {
                 video.muted = false;
@@ -637,7 +575,6 @@
             }
             lucide.createIcons();
         });
-
         volumeSlider.addEventListener('input', () => {
             video.volume = volumeSlider.value;
             video.muted = (volumeSlider.value == 0);
@@ -649,24 +586,20 @@
             }
             lucide.createIcons();
         });
-
         episodeBtn.addEventListener('click', () => {
             bottomSheet.classList.add('open');
         });
-
         closeSheet.addEventListener('click', () => {
             bottomSheet.classList.remove('open');
         });
-
         bottomSheet.addEventListener('click', (e) => {
             if (e.target === bottomSheet) {
                 bottomSheet.classList.remove('open');
             }
         });
-
         // Initial setup
         populateRecommendedGrid();
         showSection('home');
     </script>
 </body>
-    </html>
+</html>
