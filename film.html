@@ -17,17 +17,20 @@
             color: #fff;
             font-family: Arial, sans-serif;
             overflow: auto;
+            line-height: 1.6;
         }
         #nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: #1f1f1f;
+            background: #141414; /* Lebih gelap ala Netflix */
             display: flex;
             justify-content: space-around;
+            align-items: center;
             padding: 1rem;
             z-index: 30;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
         #nav button {
             background: none;
@@ -35,88 +38,202 @@
             color: #fff;
             font-size: 1rem;
             cursor: pointer;
-            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
         }
-        #nav button:hover {
+        #nav button:hover, #nav button.active {
             color: #e50914;
+            background: rgba(229, 9, 20, 0.1);
         }
         #home-section, #search-section {
             padding: 5rem 1rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         #home-section h2, #search-section h2 {
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            color: #fff;
         }
+        /* Enhanced Recommended Grid - Responsive */
         #recommended-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Mobile: 1-2 kolom */
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+        @media (min-width: 480px) {
+            #recommended-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Small mobile: 2 kolom */
+            }
+        }
+        @media (min-width: 768px) {
+            #recommended-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Tablet: 3 kolom */
+                padding: 2rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            #recommended-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Desktop: 4+ kolom */
+            }
+        }
+        @media (min-width: 1280px) {
+            #recommended-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Large desktop */
+            }
         }
         .recommend {
-            background: #333;
-            padding: 1rem;
+            background: #141414;
+            padding: 1.5rem;
             text-align: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            border-radius: 0.5rem;
-            transition: background 0.3s;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 200px; /* Fixed height untuk consistency */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .recommend::before {
+            content: attr(data-title);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 0.9rem;
         }
         .recommend:hover {
             background: #e50914;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
         }
+        .recommend:hover::before {
+            opacity: 1;
+        }
+        /* Enhanced Search - Responsive */
         #search-form {
             display: flex;
-            width: 80%;
+            width: 90%;
             max-width: 600px;
-            margin: 0 auto 1rem;
+            margin: 0 auto 2rem;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        @media (min-width: 480px) {
+            #search-form {
+                flex-direction: row;
+                gap: 0;
+            }
         }
         #search-input {
             flex: 1;
-            padding: 0.5rem;
+            padding: 0.75rem 1rem;
             background: #333;
             color: #fff;
-            border: none;
-            border-radius: 0.5rem 0 0 0.5rem;
+            border: 1px solid #444;
+            border-radius: 8px 0 0 8px;
+            font-size: 1rem;
+        }
+        #search-input::placeholder {
+            color: #aaa;
+            opacity: 1;
         }
         #search-button {
             background: #e50914;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0 0.5rem 0.5rem 0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0 8px 8px 0;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
         }
         #search-button:hover {
             background: #f40612;
         }
         #search-results {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Mobile kecil */
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+        @media (min-width: 768px) {
+            #search-results {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                padding: 2rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            #search-results {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+        }
+        @media (min-width: 1280px) {
+            #search-results {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
         }
         .search-item {
-            background: #333;
-            padding: 0.5rem;
+            background: #141414;
+            padding: 1rem;
             text-align: center;
             cursor: pointer;
-            border-radius: 0.5rem;
-            transition: background 0.3s;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+            position: relative;
         }
         .search-item:hover {
-            background: #444;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+            background: #222;
         }
         .search-item img {
             width: 100%;
-            height: auto;
-            border-radius: 0.5rem;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
         }
         .search-item p {
-            margin-top: 0.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .search-item .episodes {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #aaa;
         }
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #333;
+            border-radius: 50%;
+            border-top-color: #e50914;
+            animation: spin 1s ease-in-out infinite;
+            margin: 1rem auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Video Section - Keep existing but add responsive tweaks */
         #video-section {
             display: none;
             position: fixed;
@@ -150,8 +267,13 @@
             position: relative;
             width: 100%;
             height: 100%;
-            max-width: calc(100vh * 9 / 16); /* Enforce 9:16 aspect ratio */
+            max-width: calc(100vh * 16 / 9); /* Landscape aspect, adjust for desktop */
             margin: auto;
+        }
+        @media (orientation: portrait) {
+            #video-wrapper {
+                max-width: calc(100vw * 9 / 16); /* Portrait mobile */
+            }
         }
         #video {
             width: 100%;
@@ -187,7 +309,7 @@
             display: flex;
             align-items: center;
             background: rgba(0, 0, 0, 0.7);
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 2rem;
             transition: opacity 0.3s;
             z-index: 10;
@@ -253,13 +375,15 @@
             transition: transform 0.3s ease;
             padding: 2rem 1rem 1rem 1rem;
             position: relative;
+            border-radius: 16px 16px 0 0;
         }
         #bottom-sheet.open #sheet-content {
             transform: translateY(0);
         }
         #sheet-content h2 {
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
         }
         #close-sheet {
             position: absolute;
@@ -294,11 +418,12 @@
             padding: 1rem;
             text-align: center;
             cursor: pointer;
-            border-radius: 0.5rem;
-            transition: background 0.3s;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
         .episode:hover {
             background: #444;
+            transform: translateY(-2px);
         }
         .episode.active {
             background: #e50914;
@@ -310,7 +435,7 @@
 </head>
 <body>
     <nav id="nav">
-        <button data-section="home">Home</button>
+        <button data-section="home" class="active">Home</button>
         <button data-section="search">Search</button>
     </nav>
     <div id="home-section">
@@ -318,6 +443,7 @@
         <div id="recommended-grid"></div>
     </div>
     <div id="search-section" style="display: none;">
+        <h2>Search Dramas</h2>
         <div id="search-form">
             <input id="search-input" type="text" placeholder="Search for dramas...">
             <button id="search-button"><i data-lucide="search"></i></button>
@@ -371,8 +497,13 @@
         let currentEpisodeIndex = 0;
         let episodes = [];
         let prevVolume = 1;
+        // Loading state
+        function showLoading(container) {
+            container.innerHTML = '<div class="loading"></div>';
+        }
         async function fetchRecommendations() {
             try {
+                showLoading(recommendedGrid);
                 const res = await fetch(`${apiBase}/api/recommend`);
                 const data = await res.json();
                 if (data.status_code === 200) {
@@ -393,25 +524,26 @@
                 const div = document.createElement('div');
                 div.classList.add('recommend');
                 div.textContent = drama.drama_name;
+                div.setAttribute('data-title', drama.drama_name); // For hover overlay
                 div.addEventListener('click', () => loadDrama(drama.series_id));
                 recommendedGrid.appendChild(div);
             });
         }
         async function loadThumbnail(img, url) {
             try {
-                console.log('Loading thumbnail for URL:', url); // Debug log
+                console.log('Loading thumbnail for URL:', url);
                 const proxyUrl = proxy + encodeURIComponent(url);
                 const res = await fetch(proxyUrl);
                 if (!res.ok) {
                     throw new Error(`HTTP ${res.status}: ${res.statusText}`);
                 }
                 const blob = await res.blob();
-                console.log('Blob fetched:', { type: blob.type, size: blob.size }); // Debug log
+                console.log('Blob fetched:', { type: blob.type, size: blob.size });
 
                 let isHeic = false;
                 try {
                     isHeic = await HeicTo.isHeic(blob);
-                    console.log('Is HEIC?', isHeic); // Debug log
+                    console.log('Is HEIC?', isHeic);
                 } catch (heicCheckErr) {
                     console.warn('HEIC check failed, falling back to type check:', heicCheckErr);
                     isHeic = url.toLowerCase().includes('.heic') || blob.type === 'image/heic' || blob.type === 'image/heif';
@@ -419,7 +551,7 @@
 
                 let finalBlob = blob;
                 if (isHeic) {
-                    console.log('Converting HEIC...'); // Debug log
+                    console.log('Converting HEIC...');
                     const converted = await HeicTo({
                         blob: blob,
                         type: 'image/jpeg',
@@ -429,12 +561,12 @@
                         throw new Error('Conversion returned invalid blob');
                     }
                     finalBlob = converted;
-                    console.log('Converted blob:', { type: finalBlob.type, size: finalBlob.size }); // Debug log
+                    console.log('Converted blob:', { type: finalBlob.type, size: finalBlob.size });
                 }
 
                 const objectUrl = URL.createObjectURL(finalBlob);
                 img.src = objectUrl;
-                console.log('Image src set to object URL'); // Debug log
+                console.log('Image src set to object URL');
             } catch (err) {
                 console.error('Thumbnail load error:', err);
                 img.src = ''; // or placeholder
@@ -443,6 +575,7 @@
         async function performSearch() {
             const query = searchInput.value.trim();
             if (!query) return;
+            showLoading(searchResults);
             try {
                 const res = await fetch(`${apiBase}/api/search?query=${encodeURIComponent(query)}`);
                 const data = await res.json();
@@ -455,6 +588,8 @@
                         img.alt = book.title;
                         if (book.thumb_url) {
                             loadThumbnail(img, book.thumb_url);
+                        } else {
+                            img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iI2FhYSIgZGVTPSJ0ZXh0LWFuY2hvcjptaWRkbGU7IGRvbWluYW50LWJhc2VsaW5lOmNlbnRyYWw7Ij5ObyBJbWFnZTwvdGV4dD48L3N2Zz4='; // Placeholder
                         }
                         div.appendChild(img);
                         const p = document.createElement('p');
@@ -482,7 +617,10 @@
         });
         function showSection(sec) {
             sections.forEach(s => {
-                document.getElementById(`${s}-section`).style.display = (s === sec ? 'block' : 'none');
+                const sectionEl = document.getElementById(`${s}-section`);
+                sectionEl.style.display = (s === sec ? 'block' : 'none');
+                const btn = nav.querySelector(`[data-section="${s}"]`);
+                if (btn) btn.classList.toggle('active', s === sec);
             });
             videoSection.style.display = (sec === 'video' ? 'block' : 'none');
             if (sec === 'video') {
@@ -503,6 +641,7 @@
         });
         async function loadDrama(series_id) {
             try {
+                showLoading(episodeGrid);
                 const res = await fetch(`${apiBase}/api/video-details?series_id=${series_id}`);
                 const data = await res.json();
                 if (data.status_code === 200) {
